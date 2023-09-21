@@ -37,4 +37,4 @@ jobs:
  
     - name: Run unit test
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: ${{env.GITHUB_WORKSPACE}}\${{env.BUILD_PLATFORM}}\${{env.BUILD_CONFIGURATION}}\UnitTest.exe -e -nc
+      run: ${{env.BUILD_PLATFORM}}\${{env.BUILD_CONFIGURATION}}\UnitTest.exe -e -nc
