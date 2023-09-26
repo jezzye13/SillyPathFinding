@@ -4,62 +4,155 @@
 #include "glm/vec3.hpp"
 #include "../SillyPathFinding/SillyPathFinding.cpp"
 #include "../SillyPathFinding/Node.cpp"
-
-constexpr auto SIZE_X = 20;
-constexpr auto SIZE_Y = 50;
+#include "PrintPath.h"
 
 int main()
 {
 	std::cout << "Hello Silly PathFinding!\n";
 
-	std::vector<spf::Node> grid;
-
-	for (size_t x = 0; x < SIZE_X; x++)
+	// Run path basic
 	{
-		for (size_t y = 0; y < SIZE_Y; y++)
+		const int SIZE_X = 20;
+		const int SIZE_Y = 50;
+		std::vector<spf::Node> grid;
+
+		// Define nodes
+		for (int x = 0; x < SIZE_X; x++)
 		{
-			bool isWall = false;
-			if (x < 8 && y == 5)
+			for (int y = 0; y < SIZE_Y; y++)
 			{
-				isWall = true;
-			}
-
-			grid.push_back(spf::Node(glm::ivec2(x, y), 1.0f, isWall));
-		}
-	}
-
-	std::vector<glm::ivec2> path;
-
-	bool foundPath = spf::AStar(grid, glm::ivec2(4, 3), glm::ivec2(12, 44), path);
-
-	printf("Path found: ");
-	printf(foundPath ? "true" : "false");
-	printf("\n");
-
-	std::string output;
-	for (size_t x = 0; x < SIZE_X; x++)
-	{
-		for (size_t y = 0; y < SIZE_Y; y++)
-		{
-			bool pathFound = false;
-			for (glm::ivec2 item : path)
-			{
-				if (item.x == x && item.y == y) {
-					output += "@";
-					pathFound = true;
-					continue;
+				bool isWall = false;
+				if (x < 8 && y == 5)
+				{
+					isWall = true;
 				}
-			}
-			if (spf::GetNode(grid, glm::ivec2(x, y))->isWall)
-			{
-				output += "W";
-			}
-			else if (!pathFound)
-			{
-				output += ".";
+
+				grid.push_back(spf::Node(glm::ivec2(x, y), 1.0f, isWall));
 			}
 		}
-		output += "\n";
+
+		std::vector<glm::ivec2> path;
+
+		bool foundPath = spf::AStar(grid, glm::ivec2(4, 3), glm::ivec2(12, 44), path);
+
+		std::cout << "Path found: " << (foundPath ? "true" : "false") << "\n";
+
+		std::cout << PathToString(grid, path, SIZE_X, SIZE_Y);
 	}
-	std::cout << output;
+	//
+
+	// Run path L shape
+	{
+		const int SIZE_X = 40;
+		const int SIZE_Y = 60;
+		std::vector<spf::Node> grid;
+
+		// Define nodes
+		for (int x = 0; x < SIZE_X; x++)
+		{
+			for (int y = 0; y < SIZE_Y; y++)
+			{
+				bool isWall = false;
+				if (x < 8 && y == 5) // small wall
+				{
+					isWall = true;
+				}
+
+				if (y < 40 && x == 30) //wall for L shape
+				{
+					isWall = true;
+				}
+
+				if (x < 30 && y == 39) // small wall
+				{
+					isWall = true;
+					if (x == 5) // create a small hole in the wall
+					{
+						isWall = false;
+					}
+				}
+
+				grid.push_back(spf::Node(glm::ivec2(x, y), 1.0f, isWall));
+			}
+		}
+
+		std::vector<glm::ivec2> path;
+
+		bool foundPath = spf::AStar(grid, glm::ivec2(4, 3), glm::ivec2(35, 55), path);
+
+		std::cout << "Path found: " << (foundPath ? "true" : "false") << "\n";
+
+		std::cout << PathToString(grid, path, SIZE_X, SIZE_Y);
+	}
+	//
+
+	// Run path with big wall
+	{
+		const int SIZE_X = 20;
+		const int SIZE_Y = 50;
+		std::vector<spf::Node> grid;
+
+		// Define nodes
+		for (int x = 0; x < SIZE_X; x++)
+		{
+			for (int y = 0; y < SIZE_Y; y++)
+			{
+				bool isWall = false;
+				if (x < 8 && y == 5)
+				{
+					isWall = true;
+				}
+
+				if (y > 15 && y < 25 && x < 15) // big wall
+				{
+					isWall = true;
+				}
+
+				grid.push_back(spf::Node(glm::ivec2(x, y), 1.0f, isWall));
+			}
+		}
+
+		std::vector<glm::ivec2> path;
+
+		bool foundPath = spf::AStar(grid, glm::ivec2(1, 1), glm::ivec2(1, 44), path);
+
+		std::cout << "Path found: " << (foundPath ? "true" : "false") << "\n";
+
+		std::cout << PathToString(grid, path, SIZE_X, SIZE_Y);
+	}
+	//
+
+	// Run path with big map and wall
+	{
+		const int SIZE_X = 120;
+		const int SIZE_Y = 120;
+		std::vector<spf::Node> grid;
+
+		// Define nodes
+		for (int x = 0; x < SIZE_X; x++)
+		{
+			for (int y = 0; y < SIZE_Y; y++)
+			{
+				bool isWall = false;
+				if (y > 15 && y < 50 && x < 50) // big wall
+				{
+					isWall = true;
+				}
+
+				grid.push_back(spf::Node(glm::ivec2(x, y), 1.0f, isWall));
+			}
+		}
+
+		std::vector<glm::ivec2> path;
+
+		bool foundPath = spf::AStar(grid, glm::ivec2(0, 0), glm::ivec2(119, 119), path);
+
+		std::cout << "Path found: " << (foundPath ? "true" : "false") << "\n";
+
+		std::cout << PathToString(grid, path, SIZE_X, SIZE_Y);
+	}
+	//
+
+	std::cout << "Done!\n";
+	return 0;
 }
