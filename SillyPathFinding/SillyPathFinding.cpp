@@ -19,7 +19,7 @@ Node* GetNode(std::vector<spf::Node>& grid, const glm::ivec2& position)
 	return nullptr;
 }
 
-bool AStar(std::vector<spf::Node>& grid, const   glm::ivec2& start, const   glm::ivec2& finish, std::vector<  glm::ivec2>& path)
+bool AStar(std::vector<spf::Node>& grid, const glm::ivec2& start, const glm::ivec2& finish, std::vector<glm::ivec2>& path)
 {
 	const  glm::ivec2 directions[] = {
 		 glm::ivec2(-1, 0),
@@ -125,4 +125,4 @@ bool AStar(std::vector<spf::Node>& grid, const   glm::ivec2& start, const   glm:
 	}
 	return false;
 }
-}
+} // namespace spf
