@@ -33,8 +33,8 @@ bool AStar(std::vector<spf::Node>& grid, const glm::ivec2& start, const glm::ive
 
 	glm::ivec2 currentNode;
 	int currentIndex = 0;
-	std::vector<  glm::ivec2> openList;
-	std::vector<  glm::ivec2> closeList;
+	std::vector<glm::ivec2> openList;
+	std::vector<glm::ivec2> closeList;
 
 	glm::ivec2 startPosition = start;
 
@@ -61,7 +61,7 @@ bool AStar(std::vector<spf::Node>& grid, const glm::ivec2& start, const glm::ive
 
 		if (currentNode == finish)
 		{
-			std::vector< glm::ivec2> returnPath;
+			std::vector<glm::ivec2> returnPath;
 			glm::ivec2 current = currentNode;
 
 			int safety = 0;
@@ -76,7 +76,7 @@ bool AStar(std::vector<spf::Node>& grid, const glm::ivec2& start, const glm::ive
 			return true;
 		}
 
-		std::vector<  glm::ivec2> children;
+		std::vector<glm::ivec2> children;
 		for (size_t i = 0; i < 8; i++)
 		{
 			glm::ivec2 look = currentNode + directions[i];
