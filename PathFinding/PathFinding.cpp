@@ -33,11 +33,11 @@ int main()
 
 		std::vector<glm::ivec2> path;
 
-		bool foundPath = spf::AStar(grid, glm::ivec2(4, 3), glm::ivec2(12, 44), path);
+		bool foundPath = spf::AStar(grid, SIZE_Y, glm::ivec2(4, 3), glm::ivec2(12, 44), path);
 
 		std::cout << "Path found: " << (foundPath ? "true" : "false") << "\n";
 
-		std::cout << PathToString(grid, path, SIZE_X, SIZE_Y);
+		std::cout << PathToString(grid, SIZE_Y, path, SIZE_X, SIZE_Y);
 	}
 	//
 
@@ -78,11 +78,11 @@ int main()
 
 		std::vector<glm::ivec2> path;
 
-		bool foundPath = spf::AStar(grid, glm::ivec2(4, 3), glm::ivec2(35, 55), path);
+		bool foundPath = spf::AStar(grid, SIZE_Y, glm::ivec2(4, 3), glm::ivec2(35, 55), path);
 
 		std::cout << "Path found: " << (foundPath ? "true" : "false") << "\n";
 
-		std::cout << PathToString(grid, path, SIZE_X, SIZE_Y);
+		std::cout << PathToString(grid, SIZE_Y, path, SIZE_X, SIZE_Y);
 	}
 	//
 
@@ -114,11 +114,11 @@ int main()
 
 		std::vector<glm::ivec2> path;
 
-		bool foundPath = spf::AStar(grid, glm::ivec2(1, 1), glm::ivec2(1, 44), path);
+		bool foundPath = spf::AStar(grid, SIZE_Y, glm::ivec2(1, 1), glm::ivec2(1, 44), path);
 
 		std::cout << "Path found: " << (foundPath ? "true" : "false") << "\n";
 
-		std::cout << PathToString(grid, path, SIZE_X, SIZE_Y);
+		std::cout << PathToString(grid, SIZE_Y, path, SIZE_X, SIZE_Y);
 	}
 	//
 
@@ -145,11 +145,11 @@ int main()
 
 		std::vector<glm::ivec2> path;
 
-		bool foundPath = spf::AStar(grid, glm::ivec2(0, 0), glm::ivec2(119, 119), path);
+		bool foundPath = spf::AStar(grid, SIZE_Y, glm::ivec2(0, 0), glm::ivec2(119, 119), path);
 
 		std::cout << "Path found: " << (foundPath ? "true" : "false") << "\n";
 
-		std::cout << PathToString(grid, path, SIZE_X, SIZE_Y);
+		std::cout << PathToString(grid, SIZE_Y, path, SIZE_X, SIZE_Y);
 	}
 	//
 

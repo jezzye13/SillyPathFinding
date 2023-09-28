@@ -1,6 +1,6 @@
 #pragma once
 
-std::string PathToString(std::vector<spf::Node>& grid, const std::vector<glm::ivec2>& path, const int gridSizeX, const int gridSizeY)
+std::string PathToString(std::vector<spf::Node>& grid, const int& gridWidth, const std::vector<glm::ivec2>& path, const int gridSizeX, const int gridSizeY)
 {
 	std::string output;
 	for (int x = 0; x < gridSizeX; x++)
@@ -16,7 +16,7 @@ std::string PathToString(std::vector<spf::Node>& grid, const std::vector<glm::iv
 					continue;
 				}
 			}
-			if (spf::GetNode(grid, glm::ivec2(x, y))->isWall)
+			if (spf::GetNode(grid, gridWidth, glm::ivec2(x, y))->isWall)
 			{
 				output += "W";
 			}

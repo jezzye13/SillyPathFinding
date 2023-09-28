@@ -26,7 +26,7 @@ TEST_CASE("Find simple the path") {
 
 	std::vector<glm::ivec2> path;
 
-	bool foundPath = spf::AStar(grid, glm::ivec2(4, 3), glm::ivec2(12, 44), path);
+	bool foundPath = spf::AStar(grid, SIZE_Y, glm::ivec2(4, 3), glm::ivec2(12, 44), path);
 
 	CHECK(foundPath);
 }
@@ -53,7 +53,7 @@ TEST_CASE("Find simple the path with wall") {
 
 	std::vector<glm::ivec2> path;
 
-	bool foundPath = spf::AStar(grid, glm::ivec2(4, 3), glm::ivec2(12, 44), path);
+	bool foundPath = spf::AStar(grid, SIZE_Y, glm::ivec2(4, 3), glm::ivec2(12, 44), path);
 
 	CHECK(foundPath);
 }
@@ -80,7 +80,7 @@ TEST_CASE("Impossible to find simple the path") {
 
 	std::vector<glm::ivec2> path;
 
-	bool foundPath = spf::AStar(grid, glm::ivec2(4, 3), glm::ivec2(12, 44), path);
+	bool foundPath = spf::AStar(grid, SIZE_Y, glm::ivec2(4, 3), glm::ivec2(12, 44), path);
 
 	CHECK(!foundPath);
 }

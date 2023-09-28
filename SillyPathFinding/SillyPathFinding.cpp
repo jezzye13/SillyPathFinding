@@ -8,18 +8,18 @@
 
 namespace spf {
 
-Node* GetNode(std::vector<spf::Node>& grid, const glm::ivec2& position)
+Node* GetNode(std::vector<spf::Node>& grid, const int& gridWidth, const glm::ivec2& position)
 {
-	for (std::vector<spf::Node>::size_type i = 0; i != grid.size(); i++) {
-		if (grid[i].position == position)
-		{
-			return &grid[i];
-		}
+	int index = (position.x * gridWidth) + position.y;
+	try {
+		return &grid.at(index);
 	}
-	return nullptr;
+	catch (std::out_of_range) {
+		return nullptr;
+	}
 }
 
-bool AStar(std::vector<spf::Node>& grid, const glm::ivec2& start, const glm::ivec2& finish, std::vector<glm::ivec2>& path)
+bool AStar(std::vector<spf::Node>& grid, const int& gridWidth, const glm::ivec2& start, const glm::ivec2& finish, std::vector<glm::ivec2>& path)
 {
 	const  glm::ivec2 directions[] = {
 		 glm::ivec2(-1, 0),
@@ -39,7 +39,7 @@ bool AStar(std::vector<spf::Node>& grid, const glm::ivec2& start, const glm::ive
 	glm::ivec2 startPosition = start;
 
 	openList.push_back(start);
-	GetNode(grid, start)->parrent = start;
+	GetNode(grid, gridWidth, start)->parrent = start;
 
 	while (!openList.empty())
 	{
@@ -49,7 +49,7 @@ bool AStar(std::vector<spf::Node>& grid, const glm::ivec2& start, const glm::ive
 		for (int i = 0; i < openList.size(); i++)
 		{
 			glm::ivec2 item = openList[i];
-			if (GetNode(grid, item)->F() < GetNode(grid, currentNode)->F())
+			if (GetNode(grid, gridWidth, item)->F() < GetNode(grid, gridWidth, currentNode)->F())
 			{
 				currentNode = item;
 				currentIndex = i;
@@ -68,7 +68,7 @@ bool AStar(std::vector<spf::Node>& grid, const glm::ivec2& start, const glm::ive
 			while (current != startPosition && safety < 4000)
 			{
 				returnPath.push_back(current);
-				current = GetNode(grid, current)->parrent;
+				current = GetNode(grid, gridWidth, current)->parrent;
 				safety++;
 			}
 			returnPath.push_back(startPosition);
@@ -80,7 +80,7 @@ bool AStar(std::vector<spf::Node>& grid, const glm::ivec2& start, const glm::ive
 		for (size_t i = 0; i < 8; i++)
 		{
 			glm::ivec2 look = currentNode + directions[i];
-			Node* node = GetNode(grid, look);
+			Node* node = GetNode(grid, gridWidth, look);
 			if (node != nullptr)
 			{
 				if (!node->isWall)
@@ -106,14 +106,14 @@ bool AStar(std::vector<spf::Node>& grid, const glm::ivec2& start, const glm::ive
 			}
 			if (ignore) { continue; }
 
-			Node* node = GetNode(grid, child);
-			node->G = GetNode(grid, currentNode)->G + GetNode(grid, currentNode)->Weight();
+			Node* node = GetNode(grid, gridWidth, child);
+			node->G = GetNode(grid, gridWidth, currentNode)->G + GetNode(grid, gridWidth, currentNode)->Weight();
 			node->H = glm::distance(glm::vec2(child), glm::vec2(finish));
 
 			ignore = false;
 			for (glm::ivec2 openNode : openList)
 			{
-				if (std::count(openList.begin(), openList.end(), child) && GetNode(grid, child)->G > GetNode(grid, openNode)->G)
+				if (std::count(openList.begin(), openList.end(), child) && GetNode(grid, gridWidth, child)->G > GetNode(grid, gridWidth, openNode)->G)
 				{
 					ignore = true;
 				}
