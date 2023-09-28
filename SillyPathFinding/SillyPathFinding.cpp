@@ -8,7 +8,7 @@
 
 namespace spf {
 
-Node* GetNode(std::vector<spf::Node>& grid, const int& gridWidth, const glm::ivec2& position)
+Node* GetNode(std::vector<spf::Node>& grid, const unsigned int& gridWidth, const glm::ivec2& position)
 {
 	int index = (position.x * gridWidth) + position.y;
 	try {
@@ -19,7 +19,7 @@ Node* GetNode(std::vector<spf::Node>& grid, const int& gridWidth, const glm::ive
 	}
 }
 
-bool AStar(std::vector<spf::Node>& grid, const int& gridWidth, const glm::ivec2& start, const glm::ivec2& finish, std::vector<glm::ivec2>& path)
+bool AStar(std::vector<spf::Node>& grid, const unsigned int& gridWidth, const glm::ivec2& start, const glm::ivec2& finish, std::vector<glm::ivec2>& path)
 {
 	const  glm::ivec2 directions[] = {
 		 glm::ivec2(-1, 0),
