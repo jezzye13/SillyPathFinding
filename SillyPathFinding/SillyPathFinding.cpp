@@ -11,17 +11,20 @@ namespace spf {
 Node* GetNode(std::vector<spf::Node>& grid, const unsigned int& gridWidth, const glm::ivec2& position)
 {
 	int index = (position.x * gridWidth) + position.y;
-	try {
-		return &grid.at(index);
-	}
-	catch (std::out_of_range) {
+	int size = grid.size();
+	if (index < 0 || index >= size)
+	{
 		return nullptr;
+	}
+	else
+	{
+		return &grid.at(index);
 	}
 }
 
 bool AStar(std::vector<spf::Node>& grid, const unsigned int& gridWidth, const glm::ivec2& start, const glm::ivec2& finish, std::vector<glm::ivec2>& path)
 {
-	const  glm::ivec2 directions[] = {
+	const glm::ivec2 directions[] = {
 		 glm::ivec2(-1, 0),
 		 glm::ivec2(-1, -1),
 		 glm::ivec2(0, -1),
@@ -33,7 +36,7 @@ bool AStar(std::vector<spf::Node>& grid, const unsigned int& gridWidth, const gl
 
 	glm::ivec2 currentNode;
 	int currentIndex = 0;
-	std::vector<glm::ivec2> openList;
+	std::vector<glm::ivec2> openList; // Queue?
 	std::vector<glm::ivec2> closeList;
 
 	glm::ivec2 startPosition = start;
@@ -94,6 +97,8 @@ bool AStar(std::vector<spf::Node>& grid, const unsigned int& gridWidth, const gl
 			}
 		}
 
+		// While open Queue is not empty
+		// Add the look node in the Queue first
 		for (glm::ivec2 child : children)
 		{
 			bool ignore = false;
