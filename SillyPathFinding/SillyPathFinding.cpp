@@ -5,6 +5,8 @@
 #include "framework.h"
 #include "glm/glm.hpp"
 #include "glm/vec2.hpp"
+#include "Heap.h"
+#include <unordered_set>
 
 namespace spf {
 
@@ -22,6 +24,10 @@ Node* GetNode(std::vector<spf::Node>& grid, const unsigned int& gridWidth, const
 	}
 }
 
+int ToInt(glm::ivec2 v, int width) {
+	return (v.x * width) + v.y;
+}
+
 bool AStar(std::vector<spf::Node>& grid, const unsigned int& gridWidth, const glm::ivec2& start, const glm::ivec2& finish, std::vector<glm::ivec2>& path)
 {
 	const glm::ivec2 directions[] = {
@@ -36,31 +42,26 @@ bool AStar(std::vector<spf::Node>& grid, const unsigned int& gridWidth, const gl
 
 	glm::ivec2 currentNode;
 	int currentIndex = 0;
-	std::vector<glm::ivec2> openList; // Queue?
-	std::vector<glm::ivec2> closeList;
+	jv::Heap<glm::ivec2> openList{};
+	openList.length = grid.size();
+	openList.data = new jv::KeyPair<glm::ivec2>[grid.size()];
+	std::unordered_set<int> closeList;
 
 	glm::ivec2 startPosition = start;
 
-	openList.push_back(start);
+	openList.Insert(start, GetNode(grid, gridWidth, start)->F());
+	closeList.insert(ToInt(start, gridWidth));
 	GetNode(grid, gridWidth, start)->parrent = start;
 
-	while (!openList.empty())
+	/*
+	if you want to have the perfect path:
+	if you see that a child is already in closed, check if the previous F value is larger than the current one.
+	if its smaller, you update the F value in the closed thingy and you add the child in open regardless.
+	*/
+
+	while (openList.count > 0)
 	{
-		currentNode = openList[0];
-		currentIndex = 0;
-
-		for (int i = 0; i < openList.size(); i++)
-		{
-			glm::ivec2 item = openList[i];
-			if (GetNode(grid, gridWidth, item)->F() < GetNode(grid, gridWidth, currentNode)->F())
-			{
-				currentNode = item;
-				currentIndex = i;
-			}
-		}
-
-		openList.erase(openList.begin() + currentIndex);
-		closeList.push_back(currentNode);
+		currentNode = openList.Pop();
 
 		if (currentNode == finish)
 		{
@@ -76,6 +77,7 @@ bool AStar(std::vector<spf::Node>& grid, const unsigned int& gridWidth, const gl
 			}
 			returnPath.push_back(startPosition);
 			path = returnPath; // todo return reversed path
+			delete[] openList.data;
 			return true;
 		}
 
@@ -88,7 +90,7 @@ bool AStar(std::vector<spf::Node>& grid, const unsigned int& gridWidth, const gl
 			{
 				if (!node->isWall)
 				{
-					if (!std::count(closeList.begin(), closeList.end(), look))
+					if (closeList.find(ToInt(look, gridWidth)) == closeList.end())
 					{
 						node->parrent = currentNode;
 						children.push_back(look);
@@ -101,33 +103,15 @@ bool AStar(std::vector<spf::Node>& grid, const unsigned int& gridWidth, const gl
 		// Add the look node in the Queue first
 		for (glm::ivec2 child : children)
 		{
-			bool ignore = false;
-			for (glm::ivec2 closedChild : closeList)
-			{
-				if (child == closedChild)
-				{
-					ignore = true;
-				}
-			}
-			if (ignore) { continue; }
-
 			Node* node = GetNode(grid, gridWidth, child);
 			node->G = GetNode(grid, gridWidth, currentNode)->G + GetNode(grid, gridWidth, currentNode)->Weight();
 			node->H = glm::distance(glm::vec2(child), glm::vec2(finish));
 
-			ignore = false;
-			for (glm::ivec2 openNode : openList)
-			{
-				if (std::count(openList.begin(), openList.end(), child) && GetNode(grid, gridWidth, child)->G > GetNode(grid, gridWidth, openNode)->G)
-				{
-					ignore = true;
-				}
-			}
-			if (ignore) { continue; }
-
-			openList.push_back(child);
+			openList.Insert(child, node->F());
+			closeList.insert(ToInt(child, gridWidth));
 		}
 	}
+	delete[] openList.data;
 	return false;
 }
 } // namespace spf
