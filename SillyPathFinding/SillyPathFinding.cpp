@@ -6,14 +6,13 @@
 #include "glm/glm.hpp"
 #include "glm/vec2.hpp"
 #include "Heap.h"
-#include <unordered_set>
 
 namespace spf {
 
 Node* GetNode(std::vector<spf::Node>& grid, const unsigned int& gridWidth, const glm::ivec2& position)
 {
 	int index = (position.x * gridWidth) + position.y;
-	int size = grid.size();
+	size_t size = grid.size();
 	if (index < 0 || index >= size)
 	{
 		return nullptr;
@@ -41,7 +40,6 @@ bool AStar(std::vector<spf::Node>& grid, const unsigned int& gridWidth, const gl
 		 glm::ivec2(-1, 1), };
 
 	glm::ivec2 currentNode;
-	int currentIndex = 0;
 	jv::Heap<glm::ivec2> openList{};
 	openList.length = grid.size();
 	openList.data = new jv::KeyPair<glm::ivec2>[grid.size()];
@@ -76,7 +74,7 @@ bool AStar(std::vector<spf::Node>& grid, const unsigned int& gridWidth, const gl
 				safety++;
 			}
 			returnPath.push_back(startPosition);
-			path = returnPath; // todo return reversed path
+			path = returnPath;
 			delete[] openList.data;
 			return true;
 		}
@@ -99,8 +97,6 @@ bool AStar(std::vector<spf::Node>& grid, const unsigned int& gridWidth, const gl
 			}
 		}
 
-		// While open Queue is not empty
-		// Add the look node in the Queue first
 		for (glm::ivec2 child : children)
 		{
 			Node* node = GetNode(grid, gridWidth, child);
