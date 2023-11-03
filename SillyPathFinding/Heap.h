@@ -7,7 +7,7 @@ namespace jv
 	template <typename T>
 	struct KeyPair
 	{
-		uint32_t key;
+		float key;
 		T value;
 	};
 	
@@ -19,7 +19,7 @@ namespace jv
 		uint32_t length = 0;
 		uint32_t count = 0;
 
-		void Insert(const T& value, uint32_t key);
+		void Insert(const T& value, float key);
 		[[nodiscard]] T Peek();
 		T Pop();
 		void Clear();
@@ -30,7 +30,7 @@ namespace jv
 	};
 
 	template <typename T>
-	void Heap<T>::Insert(const T& value, const uint32_t key)
+	void Heap<T>::Insert(const T& value, const float key)
 	{
 		assert(count < length);
 		count++;
